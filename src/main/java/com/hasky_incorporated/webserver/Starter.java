@@ -1,6 +1,14 @@
 package com.hasky_incorporated.webserver;
 
+import com.hasky_incorporated.webserver.server.Server;
+
 public class Starter {
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.setPort(7777);
+        server.setSourcePath("src\\main\\resources\\webApp");
+        server.start();
+    }
 }
 
 // TODO: content type & content length, можливо не потрібні.
