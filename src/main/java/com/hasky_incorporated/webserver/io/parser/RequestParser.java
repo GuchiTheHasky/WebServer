@@ -1,6 +1,6 @@
 package com.hasky_incorporated.webserver.io.parser;
 
-import com.hasky_incorporated.webserver.etities.HttpMethod;
+import com.hasky_incorporated.webserver.enums.HttpMethod;
 import com.hasky_incorporated.webserver.etities.Request;
 import com.hasky_incorporated.webserver.io.reader.ResourceReader;
 
@@ -44,7 +44,7 @@ public class RequestParser {
 
     private HashMap<String, String> getHeaders(String content) {
         HashMap<String, String> headers = new HashMap<>();
-        String[] lines = content.split("\r\n"); //"\\r?\\n
+        String[] lines = content.split("\r\n");
         for (int i = 1; i < lines.length; i++) {
             String[] parts = lines[i].split(":", 2);
             if (parts.length == 2) {

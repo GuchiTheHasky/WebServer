@@ -1,0 +1,41 @@
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #5fa3e0;
+}
+
+.container {
+    background-color: #5fa3e0;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 250px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: pink;
+    font-size: 18px;
+    text-align: center;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: black;
+}
+
+button[type="submit"] {
+    background-color: #29FF20;
+    padding: 10px;
+    width: 200px;
+    font-size: 18px;
+}
+
+
+
+

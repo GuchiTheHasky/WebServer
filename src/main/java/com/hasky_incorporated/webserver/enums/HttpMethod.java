@@ -1,16 +1,19 @@
-package com.hasky_incorporated.webserver.etities;
+package com.hasky_incorporated.webserver.enums;
 
 import com.hasky_incorporated.webserver.handlers.ExceptionHandler;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public enum HttpMethod {
     GET("GET"),
     POST("POST");
 
-    private final String method;
+    private String method;
 
-    HttpMethod(String method) {
-        this.method = method;
-    }
     public static String seekMethod(String... values) {
         for (String method : values) {
             if (method.equals(HttpMethod.GET.name()) || method.equals(HttpMethod.POST.name())) {
