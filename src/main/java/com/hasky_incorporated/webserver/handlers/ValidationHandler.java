@@ -7,8 +7,8 @@ import java.net.Socket;
 
 public class ValidationHandler {
     public static void isAccepted(Socket socket) {
-        if (socket.isConnected()) {
-            System.out.println("Client: " + socket + " connected.");
+        if (!socket.isConnected()) {
+            throw new ExceptionHandler("Connection lost");
         }
     }
 
