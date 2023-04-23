@@ -1,7 +1,7 @@
 package com.hasky_incorporated.webserver.io.parser;
 
 import com.hasky_incorporated.webserver.enums.HttpMethod;
-import com.hasky_incorporated.webserver.etities.Request;
+import com.hasky_incorporated.webserver.entity.Request;
 import com.hasky_incorporated.webserver.io.reader.ResourceReader;
 
 import java.io.BufferedReader;

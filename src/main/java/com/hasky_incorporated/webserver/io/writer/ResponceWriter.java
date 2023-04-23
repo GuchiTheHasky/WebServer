@@ -2,7 +2,7 @@ package com.hasky_incorporated.webserver.io.writer;
 
 import com.hasky_incorporated.webserver.enums.HttpStatus;
 import com.hasky_incorporated.webserver.enums.ServerTools;
-import com.hasky_incorporated.webserver.etities.Request;
+import com.hasky_incorporated.webserver.entity.Request;
 import com.hasky_incorporated.webserver.io.reader.ResourceReader;
 import lombok.SneakyThrows;
 

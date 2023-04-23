@@ -1,4 +1,4 @@
-package com.hasky_incorporated.webserver.etities;
+package com.hasky_incorporated.webserver.entity;
 
 import lombok.*;
 

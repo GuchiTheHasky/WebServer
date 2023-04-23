@@ -1,6 +1,6 @@
 package com.hasky_incorporated.webserver.handlers;
 
-import com.hasky_incorporated.webserver.etities.Request;
+import com.hasky_incorporated.webserver.entity.Request;
 import com.hasky_incorporated.webserver.io.parser.RequestParser;
 import com.hasky_incorporated.webserver.io.writer.ResponceWriter;
 
