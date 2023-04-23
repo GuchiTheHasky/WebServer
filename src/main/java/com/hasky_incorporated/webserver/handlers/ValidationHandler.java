@@ -18,7 +18,7 @@ public class ValidationHandler {
         return new Server(newPort, sourcePath);
     }
 
-    private static int portValidator(int port) {
+    static int portValidator(int port) {
         if (port > 1023 && port < 65535) {
             return port;
         }

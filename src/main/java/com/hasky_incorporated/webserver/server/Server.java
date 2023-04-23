@@ -26,6 +26,11 @@ public class Server {
             @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             MainHandler handler = new MainHandler();
             handler.handle(reader, outputStream, sourcePath);
+
+            if (socket.isInputShutdown() || socket.isOutputShutdown()) {
+                socket.close();
+                break;
+            }
         }
     }
 }

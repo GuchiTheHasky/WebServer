@@ -14,7 +14,7 @@ public class ResponceWriter {
     private final String CRLF = "" + (char) 0x0D + (char) 0x0A;
 
     @SneakyThrows
-    public void writeResponce(Request request, OutputStream outputStream, String resourcePath){
+    public void writeResponce(Request request, OutputStream outputStream, String resourcePath) {
         switch (request.getUri()) {
             case "/": {
                 httpTitle(outputStream);
