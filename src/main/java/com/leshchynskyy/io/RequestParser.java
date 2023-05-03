@@ -1,23 +1,24 @@
-package com.hasky_incorporated.webserver.io.parser;
+package com.leshchynskyy.io;
 
-import com.hasky_incorporated.webserver.enums.HttpMethod;
-import com.hasky_incorporated.webserver.entity.Request;
-import com.hasky_incorporated.webserver.io.reader.ResourceReader;
+import com.leshchynskyy.entity.Request;
+import com.leshchynskyy.enums.HttpMethod;
 
 import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RequestParser {
+    private static final String CRLF = "" + (char) 0x0D + (char) 0x0A;
 
     public Request parse(BufferedReader reader) {
         String content = requestContent(reader);
         String[] title = getHttpRequestTitle(content);
-        String method = getHttpMethod(title);
+        String method = title[0];
+        HttpMethod httpMethod = HttpMethod.getMethodByEssence(method);
         String uri = getUri(title);
         String version = getProtocolVersion(title);
         Map<String, String> headers = getHeaders(content);
-        return new Request(method, uri, version, headers);
+        return new Request(httpMethod, uri, version, headers);
     }
 
     private String requestContent(BufferedReader reader) {
@@ -25,31 +26,28 @@ public class RequestParser {
         return resourceReader.getContent(reader);
     }
 
-    private String[] getHttpRequestTitle(String content) {
-        String[] lines = content.split("\r\n");
+    String[] getHttpRequestTitle(String content) {
+        String[] lines = content.split(CRLF);
         return lines[0].split(" ");
     }
 
-    private String getHttpMethod(String... title) {
-        return HttpMethod.seekMethod(title);
-    }
-
-    private String getUri(String... title) {
+    String getUri(String... title) {
         return title[1];
     }
 
-    private String getProtocolVersion(String... title) {
+    String getProtocolVersion(String... title) {
         return title[2];
     }
 
-    private HashMap<String, String> getHeaders(String content) {
+    HashMap<String, String> getHeaders(String content) {
         HashMap<String, String> headers = new HashMap<>();
         String[] lines = content.split("\r\n");
+        int headerLimit = 2;
         for (int i = 1; i < lines.length; i++) {
-            String[] parts = lines[i].split(":", 2);
-            if (parts.length == 2) {
-                String key = parts[0];
-                String value = parts[1];
+            String[] headersParts = lines[i].split(":", headerLimit);
+            if (headersParts.length == headerLimit) {
+                String key = headersParts[0];
+                String value = headersParts[1];
                 headers.put(key, value);
             }
         }

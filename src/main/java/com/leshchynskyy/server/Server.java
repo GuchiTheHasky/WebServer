@@ -1,10 +1,12 @@
-package com.hasky_incorporated.webserver.server;
+package com.leshchynskyy.server;
 
-import com.hasky_incorporated.webserver.handlers.MainHandler;
-import com.hasky_incorporated.webserver.handlers.ValidationHandler;
+import com.leshchynskyy.handler.MainHandler;
+
 import lombok.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,7 +23,6 @@ public class Server {
         @Cleanup ServerSocket serverSocket = new ServerSocket(port);
         while (true) {
             @Cleanup Socket socket = serverSocket.accept();
-            ValidationHandler.isAccepted(socket);
             @Cleanup OutputStream outputStream = socket.getOutputStream();
             @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             MainHandler handler = new MainHandler();
