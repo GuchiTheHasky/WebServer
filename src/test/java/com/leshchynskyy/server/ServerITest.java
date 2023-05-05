@@ -25,7 +25,7 @@ public class ServerITest {
     @DisplayName("Test, Http GET with default client & verify response.")
     public void testHttpGetWithDefaultClientAndVerifyResponse() {
         CloseableHttpClient CLIENT = HttpClients.createDefault();
-        Thread thread = new Thread(() -> new Server(9999, "src\\main\\resources\\webApp").start());
+        Thread thread = new Thread(() -> new Server(9999, "src\\test\\resources\\webApp").start());
         thread.start();
 
         HttpGet httpGet = new HttpGet("http://localhost:9999/index.html");
@@ -41,7 +41,7 @@ public class ServerITest {
         assertEquals(expectedHeader, actualHeader);
 
         HttpEntity entity = response.getEntity();
-        String pathToHtml = "src/main/resources/webApp/index.html";
+        String pathToHtml = "src/test/resources/webApp/index.html";
         String htmlResponceExpectedContent = getContent(pathToHtml);
         String htmlResponceActualContent = EntityUtils.toString(entity);
         assertEquals(htmlResponceExpectedContent.trim(), htmlResponceActualContent.trim());
@@ -52,7 +52,7 @@ public class ServerITest {
     @DisplayName("Test, Http GET with default client for Css file & verify response.")
     public void testHttpGetWithDefaultClientForCssFileAndVerifyResponse() {
         CloseableHttpClient CLIENT = HttpClients.createDefault();
-        Thread thread = new Thread(() -> new Server(9998, "src\\main\\resources\\webApp").start());
+        Thread thread = new Thread(() -> new Server(9998, "src\\test\\resources\\webApp").start());
         thread.start();
         HttpGet httpGet = new HttpGet("http://localhost:9998/css/style.css");
         CloseableHttpResponse response = CLIENT.execute(httpGet);
@@ -66,7 +66,7 @@ public class ServerITest {
         assertEquals(expectedHeader, actualHeader);
 
         HttpEntity entity = response.getEntity();
-        String pathToCss = "src/main/resources/webApp/css/style.css";
+        String pathToCss = "src/test/resources/webApp/css/style.css";
         String cssResponceExpectedContent = getContent(pathToCss);
         String cssResponceActualContent = EntityUtils.toString(entity);
         assertEquals(cssResponceExpectedContent.trim(), cssResponceActualContent.trim());
@@ -77,7 +77,7 @@ public class ServerITest {
     @DisplayName("Test, Http GET with default client for Css file & verify response.")
     public void testHttpGetWithDefaultClientForImageFileAndVerifyResponse() {
         CloseableHttpClient CLIENT = HttpClients.createDefault();
-        Thread thread = new Thread(() -> new Server(9997, "src\\main\\resources\\webApp").start());
+        Thread thread = new Thread(() -> new Server(9997, "src\\test\\resources\\webApp").start());
         thread.start();
         HttpGet httpGet = new HttpGet("http://localhost:9997/img/image.jpg");
         CloseableHttpResponse response = CLIENT.execute(httpGet);
