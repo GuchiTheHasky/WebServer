@@ -82,18 +82,18 @@ public class ResponceWriter {
         outputStream.write(CRLF.getBytes());
     }
 
+    @SneakyThrows
     private static void sendResponceBody(OutputStream outputStream, String fileName) {
         byte[] buffer = new byte[1024];
         int bytesRead;
-        try (BufferedInputStream bisCss = new BufferedInputStream(Files.newInputStream(Paths.get(fileName)));) {
+        @Cleanup BufferedInputStream bisCss = new BufferedInputStream(Files.newInputStream(Paths.get(fileName)));
             while ((bytesRead = bisCss.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
+//     Цим методом можна замінити Apache Tika (в даному випадку);
 //    private String getContentType(File file) {
 //        if (file.getName().contains(".html")) {
 //            return "text/html";
@@ -106,4 +106,4 @@ public class ResponceWriter {
 //        }
 //        return file.getName();
 //    }
-}
+

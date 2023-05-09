@@ -21,7 +21,8 @@ public class Server {
     private int port;
     private String sourcePath;
 
-    public void start() throws IOException {
+    @SneakyThrows
+    public void start() {
 
         try (ServerSocket serverSocket = new ServerSocket(port);
              Socket socket = serverSocket.accept();

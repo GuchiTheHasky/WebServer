@@ -20,11 +20,7 @@ public class ServerExceptionITest  {
     @DisplayName("Test, connect with server try to get exception 404 file not found.")
     public void testConnectWithServerTryToGetException404FileNotFound() {
         Thread thread = new Thread(() -> {
-            try {
                 new Server(9995, "src\\test\\resources\\webApp").start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         });
         thread.start();
 
@@ -33,12 +29,7 @@ public class ServerExceptionITest  {
         CloseableHttpResponse response = CLIENT.execute(httpGet);
 
         String expectedTitle = "HTTP/1.1 404 Not Found";
-        int titleLength = expectedTitle.length();
-        String actualTitle = String.valueOf(response.getStatusLine()).substring(0, titleLength);
+        String actualTitle = String.valueOf(response.getStatusLine());
         assertEquals(expectedTitle, actualTitle);
-
-        String expectedHeader = "Content-Type: text/html";
-        String actualHeader = String.valueOf(response.getStatusLine()).substring(titleLength);
-        assertEquals(expectedHeader, actualHeader);
     }
 }

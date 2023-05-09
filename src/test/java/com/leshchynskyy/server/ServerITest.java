@@ -8,7 +8,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,11 +19,7 @@ public class ServerITest {
     @DisplayName("Test, connect to local port check title & Content-Type.")
     public void testConnectToLocalPortCheckHttpRequest() {
         Thread thread = new Thread(() -> {
-            try {
                 new Server(1026, "src\\test\\resources\\webApp").start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         });
         thread.start();
 
@@ -38,6 +33,19 @@ public class ServerITest {
         String expectedHeader = "[Content-Type: text/html]";
         String actualHeader = Arrays.toString(response.getAllHeaders());
         assertEquals(expectedHeader, actualHeader);
+    }
+
+    @Test
+    @SneakyThrows
+    public void test() {
+        Thread thread = new Thread(() -> {
+            new Server(1027, "src\\test\\resources\\webApp").start();
+        });
+        thread.start();
+
+        CloseableHttpClient myClient = HttpClients.createDefault();
+        // Помилка стається в методі: execute();
+        CloseableHttpResponse response = myClient.execute(new HttpGet("http://localhost:1027/index.html"));
     }
 }
 
