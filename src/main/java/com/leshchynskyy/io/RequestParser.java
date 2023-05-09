@@ -41,7 +41,7 @@ public class RequestParser {
 
     HashMap<String, String> getHeaders(String content) {
         HashMap<String, String> headers = new HashMap<>();
-        String[] lines = content.split("\r\n");
+        String[] lines = content.split(CRLF);
         int headerLimit = 2;
         for (int i = 1; i < lines.length; i++) {
             String[] headersParts = lines[i].split(":", headerLimit);

@@ -4,6 +4,7 @@ import com.leshchynskyy.util.ServerException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 @Getter
 @NoArgsConstructor
@@ -14,6 +15,7 @@ public enum HttpMethod {
 
     private String essence;
 
+    @SneakyThrows
     public static HttpMethod getMethodByEssence(String essence) {
         for (HttpMethod value : values()) {
             if (value.essence.equals(essence)) {

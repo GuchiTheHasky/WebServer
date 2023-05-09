@@ -15,22 +15,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RequestParserTest {
     private static final String CRLF = "" + (char) 0x0D + (char) 0x0A;
 
-    private final RequestParser parser = new RequestParser();
+    private final RequestParser PARSER = new RequestParser();
 
     @Test
     @DisplayName("Test, get HttpRequest title uri and protocol version.")
     public void testGetHttpRequestTitleURIAndProtocolVersion(){
         String requestContent = getContent("src\\test\\resources\\requestfortest");
         String[] expected = "GET /hello.htm HTTP/1.1".split(" ");
-        String[] actual = parser.getHttpRequestTitle(requestContent);
+        String[] actual = PARSER.getHttpRequestTitle(requestContent);
         assertEquals(Arrays.toString(expected), Arrays.toString(actual));
 
         String expectedUri = "/hello.htm";
-        String actualUri = parser.getUri(actual);
+        String actualUri = PARSER.getUri(actual);
         assertEquals(expectedUri, actualUri);
 
         String expectedVersion = "HTTP/1.1";
-        String actualVersion = parser.getProtocolVersion(actual);
+        String actualVersion = PARSER.getProtocolVersion(actual);
         assertEquals(expectedVersion, actualVersion);
     }
 
@@ -38,7 +38,7 @@ public class RequestParserTest {
     @DisplayName("Test, get headers from content.")
     public void testGetHeadersFromContent() {
         String requestContent = getContent("src\\test\\resources\\requestfortest");
-        HashMap<String, String> actualHeaders = parser.getHeaders(requestContent);
+        HashMap<String, String> actualHeaders = PARSER.getHeaders(requestContent);
         String actualValue = actualHeaders.get("User-Agent");
         String actualValue1 = actualHeaders.get("Host");
         String actualValue2 = actualHeaders.get("Accept-Language");

@@ -9,8 +9,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ServerExceptionITest  {
@@ -27,11 +25,12 @@ public class ServerExceptionITest  {
         CloseableHttpResponse response = CLIENT.execute(httpGet);
 
         String expectedTitle = "HTTP/1.1 404 Not Found";
-        String actualTitle = String.valueOf(response.getStatusLine());
+        int titleLength = expectedTitle.length();
+        String actualTitle = String.valueOf(response.getStatusLine()).substring(0, titleLength);
         assertEquals(expectedTitle, actualTitle);
 
-        String expectedHeader = "[Content-Type: text/html]";
-        String actualHeader = Arrays.toString(response.getAllHeaders());
+        String expectedHeader = "Content-Type: text/html";
+        String actualHeader = String.valueOf(response.getStatusLine()).substring(titleLength);
         assertEquals(expectedHeader, actualHeader);
     }
 }

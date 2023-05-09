@@ -1,12 +1,10 @@
 package com.leshchynskyy.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public enum HttpStatusCode {
     OK(200, " OK"),
     NOT_FOUND(404, " Not Found"),
@@ -16,4 +14,9 @@ public enum HttpStatusCode {
 
     private int code;
     private String status;
+
+    HttpStatusCode(int code, String status) {
+        this.code = code;
+        this.status = status;
+    }
 }
