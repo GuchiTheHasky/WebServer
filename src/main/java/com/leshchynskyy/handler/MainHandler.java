@@ -8,6 +8,7 @@ import com.leshchynskyy.io.ResponceWriter;
 import com.leshchynskyy.util.ServerException;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class MainHandler {
-    public void handle(BufferedReader reader, OutputStream outputStream, String sourcePath) {
+    public void handle(BufferedReader reader, OutputStream outputStream, String sourcePath) throws IOException {
         try {
             validateSourcePath(sourcePath);
 
@@ -25,6 +26,7 @@ public class MainHandler {
             validateHttpMethod(request);
 
             List<String> sourceFilesPathList = ResourceReader.getFilesList(sourcePath);
+
             isFileExist(request, sourceFilesPathList);
 
             ResponceWriter responceWriter = new ResponceWriter();

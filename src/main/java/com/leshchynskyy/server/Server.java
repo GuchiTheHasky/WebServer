@@ -3,7 +3,7 @@ package com.leshchynskyy.server;
 import com.leshchynskyy.enums.HttpStatusCode;
 import com.leshchynskyy.handler.MainHandler;
 
-import com.leshchynskyy.util.ServerException;
+import com.leshchynskyy.io.ResponceWriter;
 import lombok.*;
 
 import java.io.BufferedReader;
@@ -21,25 +21,26 @@ public class Server {
     private int port;
     private String sourcePath;
 
-    @SneakyThrows
-    public void start() {
-        @Cleanup ServerSocket serverSocket = new ServerSocket(port);
-        while (true) {
-            @Cleanup Socket socket = null;
+    public void start() throws IOException {
+
+        try (ServerSocket serverSocket = new ServerSocket(port);
+             Socket socket = serverSocket.accept();
+             OutputStream outputStream = socket.getOutputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
             try {
-                socket = serverSocket.accept();
+                while (true) {
+                    MainHandler handler = new MainHandler();
+                    handler.handle(reader, outputStream, sourcePath);
+
+                    if (socket.isInputShutdown() || socket.isOutputShutdown()) {
+                        socket.close();
+                        break;
+                    }
+
+                }
             } catch (IOException e) {
-                throw new ServerException(HttpStatusCode.INTERNAL_SERVER_ERROR);
-            }
-            @Cleanup OutputStream outputStream = socket.getOutputStream();
-            @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            MainHandler handler = new MainHandler();
-            handler.handle(reader, outputStream, sourcePath);
-
-            if (socket.isInputShutdown() || socket.isOutputShutdown()) {
-                socket.close();
-                break;
+                ResponceWriter.writeError(outputStream, HttpStatusCode.INTERNAL_SERVER_ERROR);
             }
         }
     }

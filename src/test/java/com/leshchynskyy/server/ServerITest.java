@@ -8,6 +8,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,13 @@ public class ServerITest {
     @SneakyThrows
     @DisplayName("Test, connect to local port check title & Content-Type.")
     public void testConnectToLocalPortCheckHttpRequest() {
-        Thread thread = new Thread(() -> new Server(1026, "src\\test\\resources\\webApp").start());
+        Thread thread = new Thread(() -> {
+            try {
+                new Server(1026, "src\\test\\resources\\webApp").start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         thread.start();
 
         CloseableHttpClient myClient = HttpClients.createDefault();

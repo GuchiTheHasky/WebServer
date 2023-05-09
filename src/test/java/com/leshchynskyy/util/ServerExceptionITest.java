@@ -9,6 +9,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ServerExceptionITest  {
@@ -17,7 +19,13 @@ public class ServerExceptionITest  {
     @Test
     @DisplayName("Test, connect with server try to get exception 404 file not found.")
     public void testConnectWithServerTryToGetException404FileNotFound() {
-        Thread thread = new Thread(() -> new Server(9995, "src\\test\\resources\\webApp").start());
+        Thread thread = new Thread(() -> {
+            try {
+                new Server(9995, "src\\test\\resources\\webApp").start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         thread.start();
 
         CloseableHttpClient CLIENT = HttpClients.createDefault();

@@ -39,14 +39,15 @@ public class ResponceWriter {
         }
     }
 
-    @SneakyThrows
-    public static void writeError(OutputStream outputStream, HttpStatusCode statusCode) {
+
+    public static void writeError(OutputStream outputStream, HttpStatusCode statusCode) throws IOException {
         List<String> errorPages = ResourceReader.getFilesList(ERROR_PAGE_PATH);
         for (String path : errorPages) {
             String code = String.valueOf(statusCode.getCode());
             if (path.startsWith(code)) {
                 outputStream.write("HTTP/1.1 ".getBytes());
                 outputStream.write((statusCode.getCode() + " " + statusCode.getStatus()).getBytes());
+                outputStream.write(CRLF.getBytes());
                 outputStream.write("Content-Type: text/html".getBytes());
                 outputStream.write(CRLF.getBytes());
                 outputStream.write(CRLF.getBytes());
@@ -81,13 +82,15 @@ public class ResponceWriter {
         outputStream.write(CRLF.getBytes());
     }
 
-    @SneakyThrows
     private static void sendResponceBody(OutputStream outputStream, String fileName) {
         byte[] buffer = new byte[1024];
         int bytesRead;
-        @Cleanup BufferedInputStream bisCss = new BufferedInputStream(Files.newInputStream(Paths.get(fileName)));
-        while ((bytesRead = bisCss.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, bytesRead);
+        try (BufferedInputStream bisCss = new BufferedInputStream(Files.newInputStream(Paths.get(fileName)));) {
+            while ((bytesRead = bisCss.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

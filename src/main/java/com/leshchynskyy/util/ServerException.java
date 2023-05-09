@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ServerException extends RuntimeException {
-    private HttpStatusCode statusCode;
+    private HttpStatusCode statusCode = HttpStatusCode.NOT_FOUND;
 
     public ServerException(HttpStatusCode statusCode) {
         this.statusCode = statusCode;
