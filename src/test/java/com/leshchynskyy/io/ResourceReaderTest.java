@@ -22,10 +22,11 @@ public class ResourceReaderTest {
             Connection: Keep-Alive
             """;
     private final ResourceReader READER = new ResourceReader();
+
     @SneakyThrows
     @Test
     @DisplayName("Test, get content from source stream.")
-    public void testGetContentFromSourceStream () {
+    public void testGetContentFromSourceStream() {
         @Cleanup BufferedReader reader = new BufferedReader
                 (new FileReader("src\\test\\resources\\requestfortest"));
         String actualContent = READER.getContent(reader);
@@ -33,7 +34,8 @@ public class ResourceReaderTest {
     }
 
     @Test
-    public void test() {
+    @DisplayName("Test, get file list from source root.")
+    public void testGetFileListFromSourceRoot() {
         List<String> actualList = ResourceReader.getFilesList("src\\test\\resources\\webApp");
         int expectedCount = 4;
         int actualCount = actualList.size();
@@ -41,7 +43,7 @@ public class ResourceReaderTest {
 
         List<String> expectedList = new ArrayList<>(
                 Arrays.asList("css/style.css",
-                        "ico/favicon.ico",
+                        "favicon.ico",
                         "img/image.jpg",
                         "index.html"));
 

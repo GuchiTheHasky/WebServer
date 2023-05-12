@@ -13,11 +13,11 @@ import java.util.List;
 
 public class ResponceWriter {
     private static final String ERROR_PAGE_PATH = "src\\main\\resources\\errorpage\\";
-    private static final String CRLF = "" + (char) 0x0D + (char) 0x0A;
-    private final String sourceFileNames =
+    private static final String CRLF = "\r\n";
+    private final String SOURCE_FILES =
             "File list:\n" + ResourceReader.getFilesList("src\\test\\resources\\webApp");
 
-    private final Tika formatExtractor = new Tika();
+    private final Tika FORMAT_EXTRACTOR = new Tika();
 
     @SneakyThrows
     public void writeResponce(Request request, OutputStream outputStream, String resourcePath, List<String> paths) {
@@ -25,10 +25,10 @@ public class ResponceWriter {
             writeAvailableFileList(outputStream);
         }
         for (String testPath : paths) {
-            String testFileFormat = formatExtractor.detect(new File(resourcePath, testPath));
+            String testFileFormat = FORMAT_EXTRACTOR.detect(new File(resourcePath, testPath));
 
             if (request.getUri().endsWith(testPath)) {
-                httpTitle(outputStream);
+                statusLine(outputStream);
                 outputStream.write(("Content-Type: " + testFileFormat).getBytes());
                 crlf(outputStream);
 
@@ -38,7 +38,6 @@ public class ResponceWriter {
             }
         }
     }
-
 
     public static void writeError(OutputStream outputStream, HttpStatusCode statusCode) throws IOException {
         List<String> errorPages = ResourceReader.getFilesList(ERROR_PAGE_PATH);
@@ -64,7 +63,7 @@ public class ResponceWriter {
     @SneakyThrows
     private void writeAvailableFileList(OutputStream outputStream) {
         defaultTitle(outputStream);
-        outputStream.write(sourceFileNames.getBytes());
+        outputStream.write(SOURCE_FILES.getBytes());
     }
 
     private static void defaultTitle(OutputStream outputStream) throws IOException {
@@ -75,10 +74,8 @@ public class ResponceWriter {
         outputStream.write(CRLF.getBytes());
     }
 
-    private void httpTitle(OutputStream outputStream) throws IOException {
-        outputStream.write("HTTP/1.1 ".getBytes());
-        outputStream.write(CRLF.getBytes());
-        outputStream.write((HttpStatusCode.OK.getCode() + HttpStatusCode.OK.getStatus()).getBytes());
+    private void statusLine(OutputStream outputStream) throws IOException {
+        outputStream.write(("HTTP/1.1 " + HttpStatusCode.OK.getCode() + " " + HttpStatusCode.OK.getStatus()).getBytes());
         outputStream.write(CRLF.getBytes());
     }
 
@@ -87,23 +84,10 @@ public class ResponceWriter {
         byte[] buffer = new byte[1024];
         int bytesRead;
         @Cleanup BufferedInputStream bisCss = new BufferedInputStream(Files.newInputStream(Paths.get(fileName)));
-            while ((bytesRead = bisCss.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
+        while ((bytesRead = bisCss.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
         }
     }
+}
 
-//     Цим методом можна замінити Apache Tika (в даному випадку);
-//    private String getContentType(File file) {
-//        if (file.getName().contains(".html")) {
-//            return "text/html";
-//        } else if (file.getName().contains(".css")) {
-//            return "text/css";
-//        } else if (file.getName().contains(".jpg")) {
-//            return "image/jpeg";
-//        } else if (file.getName().contains(".ico")) {
-//            return "image/vnd.microsoft.icon";
-//        }
-//        return file.getName();
-//    }
 

@@ -13,24 +13,22 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RequestParserTest {
-    private static final String CRLF = "" + (char) 0x0D + (char) 0x0A;
-
-    private final RequestParser PARSER = new RequestParser();
+    private static final String CRLF = "\r\n";
 
     @Test
-    @DisplayName("Test, get HttpRequest title uri and protocol version.")
-    public void testGetHttpRequestTitleURIAndProtocolVersion(){
+    @DisplayName("Test, get HttpRequest status line uri and protocol version.")
+    public void testGetHttpRequestTitleURIAndProtocolVersion() {
         String requestContent = getContent("src\\test\\resources\\requestfortest");
         String[] expected = "GET /hello.htm HTTP/1.1".split(" ");
-        String[] actual = PARSER.getHttpRequestTitle(requestContent);
+        String[] actual = RequestParser.getHttpRequestStatusLine(requestContent);
         assertEquals(Arrays.toString(expected), Arrays.toString(actual));
 
         String expectedUri = "/hello.htm";
-        String actualUri = PARSER.getUri(actual);
+        String actualUri = RequestParser.getUri(actual);
         assertEquals(expectedUri, actualUri);
 
         String expectedVersion = "HTTP/1.1";
-        String actualVersion = PARSER.getProtocolVersion(actual);
+        String actualVersion = RequestParser.getProtocolVersion(actual);
         assertEquals(expectedVersion, actualVersion);
     }
 
@@ -38,7 +36,7 @@ public class RequestParserTest {
     @DisplayName("Test, get headers from content.")
     public void testGetHeadersFromContent() {
         String requestContent = getContent("src\\test\\resources\\requestfortest");
-        HashMap<String, String> actualHeaders = PARSER.getHeaders(requestContent);
+        HashMap<String, String> actualHeaders = RequestParser.getHeaders(requestContent);
         String actualValue = actualHeaders.get("User-Agent");
         String actualValue1 = actualHeaders.get("Host");
         String actualValue2 = actualHeaders.get("Accept-Language");

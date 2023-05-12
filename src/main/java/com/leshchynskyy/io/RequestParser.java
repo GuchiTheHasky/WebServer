@@ -8,38 +8,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestParser {
-    private static final String CRLF = "" + (char) 0x0D + (char) 0x0A;
+    private static final String CRLF = "\r\n";
 
-    public Request parse(BufferedReader reader) {
+    public static Request parse(BufferedReader reader) {
         String content = requestContent(reader);
-        String[] title = getHttpRequestTitle(content);
-        String method = title[0];
+        String[] statusLine = getHttpRequestStatusLine(content);
+        String method = statusLine[0];
         HttpMethod httpMethod = HttpMethod.getMethodByEssence(method);
-        String uri = getUri(title);
-        String version = getProtocolVersion(title);
+        String uri = getUri(statusLine);
+        String version = getProtocolVersion(statusLine);
         Map<String, String> headers = getHeaders(content);
         return new Request(httpMethod, uri, version, headers);
     }
 
-    private String requestContent(BufferedReader reader) {
+    private static String requestContent(BufferedReader reader) {
         ResourceReader resourceReader = new ResourceReader();
         return resourceReader.getContent(reader);
     }
 
-    String[] getHttpRequestTitle(String content) {
+    static String[] getHttpRequestStatusLine(String content) {
         String[] lines = content.split(CRLF);
         return lines[0].split(" ");
     }
 
-    String getUri(String... title) {
-        return title[1];
+    static String getUri(String... statusLine) {
+        return statusLine[1];
     }
 
-    String getProtocolVersion(String... title) {
-        return title[2];
+    static String getProtocolVersion(String... statusLine) {
+        return statusLine[2];
     }
 
-    HashMap<String, String> getHeaders(String content) {
+    static HashMap<String, String> getHeaders(String content) {
         HashMap<String, String> headers = new HashMap<>();
         String[] lines = content.split(CRLF);
         int headerLimit = 2;

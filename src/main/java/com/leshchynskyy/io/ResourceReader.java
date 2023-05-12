@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 public class ResourceReader {
-    private static final String CRLF = "" + (char) 0x0D + (char) 0x0A;
+    private static final String CRLF = "\r\n";
 
     public static List<String> getFilesList(String resourcePath) {
         List<String> filesList = new ArrayList<>();

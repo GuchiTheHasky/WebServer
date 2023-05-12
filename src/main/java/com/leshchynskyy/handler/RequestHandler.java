@@ -8,26 +8,36 @@ import com.leshchynskyy.io.ResponceWriter;
 import com.leshchynskyy.util.ServerException;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
-public class MainHandler {
+public class RequestHandler {
     public void handle(BufferedReader reader, OutputStream outputStream, String sourcePath) throws IOException {
         try {
-            validateSourcePath(sourcePath);
+            if (!isSourcePathFile(sourcePath)) {
+                throw new ServerException(HttpStatusCode.INTERNAL_SERVER_ERROR);
+            }
 
-            RequestParser parser = new RequestParser();
-            Request request = parser.parse(reader);
+            Request request = RequestParser.parse(reader);
+            System.out.println(request);
 
-            validateHttpMethod(request);
+            if (!isValidHttpMethod(request)) {
+                throw new ServerException(HttpStatusCode.METHOD_NOT_ALLOWED);
+            }
+
+            if (isBadRequest(request)) {
+                throw new ServerException(HttpStatusCode.BAD_REQUEST);
+            }
 
             List<String> sourceFilesPathList = ResourceReader.getFilesList(sourcePath);
 
-            isFileExist(request, sourceFilesPathList);
+            if (!isFileExist(request, sourceFilesPathList)) {
+                throw new ServerException(HttpStatusCode.NOT_FOUND);
+            }
 
             ResponceWriter responceWriter = new ResponceWriter();
             responceWriter.writeResponce(request, outputStream, sourcePath, sourceFilesPathList);
@@ -36,17 +46,21 @@ public class MainHandler {
         }
     }
 
-    private void validateSourcePath(String resourcePath) {
-        Path path = Paths.get(resourcePath);
-        if (!Files.exists(path) || !Files.isDirectory(path)) {
-            throw new ServerException(HttpStatusCode.BAD_REQUEST);
+    private boolean isSourcePathFile(String resourcePath) {
+        return new File(resourcePath).exists();
+    }
+
+    private boolean isBadRequest(Request request) {
+        try {
+            new URI(request.getUri());
+            return false;
+        } catch (URISyntaxException e) {
+            return true;
         }
     }
 
-    private void validateHttpMethod(Request request) {
-        if (!request.getMethod().getEssence().equals("GET")) {
-            throw new ServerException(HttpStatusCode.METHOD_NOT_ALLOWED);
-        }
+    private boolean isValidHttpMethod(Request request) {
+        return request.getMethod().getEssence().equals("GET");
     }
 
     private boolean isFileExist(Request request, List<String> list) {
@@ -56,6 +70,6 @@ public class MainHandler {
                 return true;
             }
         }
-        throw new ServerException(HttpStatusCode.NOT_FOUND);
+        return false;
     }
 }
