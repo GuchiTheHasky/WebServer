@@ -37,11 +37,7 @@ public class ServerExceptionITest {
     @SneakyThrows
     @DisplayName("Test, send invalid request get responce 400 bad request.")
     public void testSendInvalidRequestGetResponce400BadRequest() {
-        Thread thread = new Thread(() -> {
-            new Server(1028, "src\\test\\resources\\webApp").start();
-        });
-        thread.start();
-        String[] responce = CustomClient.sendInvalidRequestAndGetResponse(1028).split("\r\n");
+        String[] responce = CustomClient.sendInvalidRequestAndGetResponse(1026).split("\r\n");
 
         String expectedStatusLine = "HTTP/1.1 400 Bad Request";
         String actualStatusLine = responce[0];
